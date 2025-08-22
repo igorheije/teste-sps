@@ -1,4 +1,4 @@
-import express, { Application } from "express";
+import express, { Application, RequestHandler } from "express";
 import routes from "./routes";
 import cors from "cors";
 import swaggerUi from "swagger-ui-express";
@@ -12,8 +12,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Swagger UI
-app.use("/api-docs", swaggerUi.serve);
-app.get("/api-docs", swaggerUi.setup(swaggerSpecs));
+const swaggerServe: RequestHandler[] =
+  swaggerUi.serve as unknown as RequestHandler[];
+const swaggerSetup: RequestHandler = swaggerUi.setup(
+  swaggerSpecs
+) as unknown as RequestHandler;
+
+app.use("/api-docs", ...swaggerServe, swaggerSetup);
 
 app.use(routes);
 
