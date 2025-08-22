@@ -1,0 +1,21 @@
+{
+  "name": "test-sps-workspace",
+  "version": "1.0.0",
+  "description": "Workspace para rodar React frontend e Node.js backend simultaneamente",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
+    "dev:server": "cd test-sps-server && npm run dev",
+    "dev:client": "cd test-sps-react && npm run dev",
+    "install:all": "npm install && cd test-sps-server && npm install && cd ../test-sps-react && npm install",
+    "build": "cd test-sps-react && npm run build",
+    "start": "npm run dev"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "workspaces": [
+    "test-sps-server",
+    "test-sps-react"
+  ]
+}
