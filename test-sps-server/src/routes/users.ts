@@ -20,10 +20,10 @@ const router = Router();
 router.use(authenticateToken);
 
 // Rota para obter dados do usuário logado
-router.get("/me", (req: AuthRequest, res: Response) => {
+router.get("/me", async (req: AuthRequest, res: Response) => {
   try {
     const userId = req.user!.id;
-    const user = findUserById(userId);
+    const user = await findUserById(userId);
 
     if (!user) {
       res.status(404).json({
@@ -61,7 +61,7 @@ router.post(
         return;
       }
 
-      if (checkEmailExists(email)) {
+      if (await checkEmailExists(email)) {
         res.status(409).json({
           error: "Email já existe",
           message: "Já existe um usuário cadastrado com este email",
@@ -86,7 +86,12 @@ router.post(
         return;
       }
 
-      const newUser = await createUser({ name, email, password, role: role || "user" });
+      const newUser = await createUser({
+        name,
+        email,
+        password,
+        role: role || "user",
+      });
 
       res.status(201).json({
         message: "Usuário criado com sucesso",
@@ -102,9 +107,9 @@ router.post(
   }
 );
 
-router.get("/", (_req: Request, res: Response) => {
+router.get("/", async (_req: Request, res: Response) => {
   try {
-    const users = getAllUsers();
+    const users = await getAllUsers();
 
     res.json({
       message: "Usuários listados com sucesso",
@@ -120,39 +125,42 @@ router.get("/", (_req: Request, res: Response) => {
   }
 });
 
-router.get("/:id", (req: AuthRequestWithParams<{ id: string }>, res: Response) => {
-  try {
-    const { id } = req.params;
-    const user = findUserById(id);
+router.get(
+  "/:id",
+  async (req: AuthRequestWithParams<{ id: string }>, res: Response) => {
+    try {
+      const { id } = req.params;
+      const user = await findUserById(id);
 
-    if (!user) {
-      res.status(404).json({
-        error: "Usuário não encontrado",
-        message: "Usuário com o ID especificado não foi encontrado",
+      if (!user) {
+        res.status(404).json({
+          error: "Usuário não encontrado",
+          message: "Usuário com o ID especificado não foi encontrado",
+        });
+        return;
+      }
+
+      if (req.user!.role !== "admin" && req.user!.id !== id) {
+        res.status(403).json({
+          error: "Acesso negado",
+          message: "Você só pode visualizar seu próprio perfil",
+        });
+        return;
+      }
+
+      res.json({
+        message: "Usuário encontrado com sucesso",
+        user,
       });
-      return;
-    }
-
-    if (req.user!.role !== "admin" && req.user!.id !== id) {
-      res.status(403).json({
-        error: "Acesso negado",
-        message: "Você só pode visualizar seu próprio perfil",
+    } catch (error) {
+      console.error("Erro ao buscar usuário:", error);
+      res.status(500).json({
+        error: "Erro interno do servidor",
+        message: "Ocorreu um erro ao buscar o usuário",
       });
-      return;
     }
-
-    res.json({
-      message: "Usuário encontrado com sucesso",
-      user,
-    });
-  } catch (error) {
-    console.error("Erro ao buscar usuário:", error);
-    res.status(500).json({
-      error: "Erro interno do servidor",
-      message: "Ocorreu um erro ao buscar o usuário",
-    });
   }
-});
+);
 
 router.put(
   "/:id",
@@ -164,7 +172,7 @@ router.put(
       const { id } = req.params;
       const { name, email, password, role } = req.body;
 
-      const existingUser = findUserById(id);
+      const existingUser = await findUserById(id);
       if (!existingUser) {
         res.status(404).json({
           error: "Usuário não encontrado",
@@ -189,7 +197,7 @@ router.put(
         return;
       }
 
-      if (email && checkEmailExists(email, id)) {
+      if (email && (await checkEmailExists(email, id))) {
         res.status(409).json({
           error: "Email já existe",
           message: "Já existe um usuário cadastrado com este email",
@@ -235,11 +243,11 @@ router.put(
 router.delete(
   "/:id",
   requireAdmin,
-  (req: AuthRequestWithParams<{ id: string }>, res: Response) => {
+  async (req: AuthRequestWithParams<{ id: string }>, res: Response) => {
     try {
       const { id } = req.params;
 
-      const existingUser = findUserById(id);
+      const existingUser = await findUserById(id);
       if (!existingUser) {
         res.status(404).json({
           error: "Usuário não encontrado",
@@ -256,7 +264,7 @@ router.delete(
         return;
       }
 
-      const deleted = deleteUser(id);
+      const deleted = await deleteUser(id);
 
       if (deleted) {
         res.json({
