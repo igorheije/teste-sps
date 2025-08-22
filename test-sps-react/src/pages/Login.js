@@ -148,21 +148,6 @@ function Login() {
             {loading ? "Entrando..." : "Entrar"}
           </button>
         </form>
-
-        <div
-          style={{
-            marginTop: "20px",
-            textAlign: "center",
-            fontSize: "14px",
-            color: "#666",
-          }}
-        >
-          <p>
-            <strong>Credenciais de teste:</strong>
-          </p>
-          <p>Email: admin@sps.com</p>
-          <p>Senha: admin123</p>
-        </div>
       </div>
     </div>
   );
