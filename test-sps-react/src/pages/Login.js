@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import "./Login.css";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -29,122 +30,38 @@ function Login() {
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        minHeight: "100vh",
-        backgroundColor: "#f5f5f5",
-      }}
-    >
-      <div
-        style={{
-          backgroundColor: "white",
-          padding: "40px",
-          borderRadius: "8px",
-          boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
-          width: "100%",
-          maxWidth: "400px",
-        }}
-      >
-        <h1
-          style={{
-            textAlign: "center",
-            marginBottom: "30px",
-            color: "#333",
-          }}
-        >
-          Login
-        </h1>
+    <div className="login-container">
+      <div className="login-card">
+        <h1 className="login-title">Login</h1>
 
-        {error && (
-          <div
-            style={{
-              backgroundColor: "#ffebee",
-              color: "#c62828",
-              padding: "10px",
-              borderRadius: "4px",
-              marginBottom: "20px",
-              textAlign: "center",
-            }}
-          >
-            {error}
-          </div>
-        )}
+        {error && <div className="login-error">{error}</div>}
 
         <form onSubmit={handleSubmit}>
-          <div style={{ marginBottom: "20px" }}>
-            <label
-              style={{
-                display: "block",
-                marginBottom: "5px",
-                fontWeight: "bold",
-                color: "#333",
-              }}
-            >
-              Email:
-            </label>
+          <div className="login-form-group">
+            <label className="login-label">Email:</label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              style={{
-                width: "100%",
-                padding: "10px",
-                border: "1px solid #ddd",
-                borderRadius: "4px",
-                fontSize: "16px",
-                boxSizing: "border-box",
-              }}
+              className="login-input"
               placeholder="admin@sps.com"
             />
           </div>
 
-          <div style={{ marginBottom: "30px" }}>
-            <label
-              style={{
-                display: "block",
-                marginBottom: "5px",
-                fontWeight: "bold",
-                color: "#333",
-              }}
-            >
-              Senha:
-            </label>
+          <div className="login-form-group">
+            <label className="login-label">Senha:</label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              style={{
-                width: "100%",
-                padding: "10px",
-                border: "1px solid #ddd",
-                borderRadius: "4px",
-                fontSize: "16px",
-                boxSizing: "border-box",
-              }}
+              className="login-input"
               placeholder="admin123"
             />
           </div>
 
-          <button
-            type="submit"
-            disabled={loading}
-            style={{
-              width: "100%",
-              padding: "12px",
-              backgroundColor: loading ? "#ccc" : "#007bff",
-              color: "white",
-              border: "none",
-              borderRadius: "4px",
-              fontSize: "16px",
-              cursor: loading ? "not-allowed" : "pointer",
-              fontWeight: "bold",
-            }}
-          >
+          <button type="submit" disabled={loading} className="login-button">
             {loading ? "Entrando..." : "Entrar"}
           </button>
         </form>

@@ -1,0 +1,80 @@
+.layout-container {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+
+.layout-header {
+  background-color: #333;
+  color: white;
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.layout-header-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.layout-title {
+  margin: 0;
+  font-size: 24px;
+}
+
+.layout-title-link {
+  color: white;
+  text-decoration: none;
+}
+
+.layout-nav {
+  display: flex;
+  gap: 15px;
+}
+
+.layout-nav-link {
+  color: white;
+  text-decoration: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.layout-nav-link:hover {
+  background-color: #555;
+}
+
+.layout-header-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.layout-user-info {
+  text-align: right;
+}
+
+.layout-user-name {
+  font-size: 14px;
+  color: #ccc;
+}
+
+.layout-user-role {
+  font-size: 12px;
+  color: #999;
+}
+
+.layout-logout-button {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.layout-main {
+  padding: 20px;
+}

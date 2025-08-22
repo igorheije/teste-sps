@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { get } from "../services/UserService";
 import { update } from "../services/UserService";
+import "./UserEdit.css";
 
 function UserEdit() {
   const { user: currentUser } = useAuth();
@@ -64,215 +65,72 @@ function UserEdit() {
   };
 
   if (initialLoading) {
-    return (
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-          fontSize: "18px",
-        }}
-      >
-        Carregando...
-      </div>
-    );
+    return <div className="user-edit-loading">Carregando...</div>;
   }
 
   if (!user) {
     return (
-      <div
-        style={{
-          backgroundColor: "white",
-          padding: "30px",
-          borderRadius: "8px",
-          boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
-          maxWidth: "600px",
-          margin: "0 auto",
-        }}
-      >
-        <h1 style={{ color: "#333", marginBottom: "30px" }}>Erro</h1>
-        <div
-          style={{
-            backgroundColor: "#ffebee",
-            color: "#c62828",
-            padding: "15px",
-            borderRadius: "4px",
-          }}
-        >
-          {error}
-        </div>
+      <div className="user-edit-container">
+        <h1 className="user-edit-title">Erro</h1>
+        <div className="user-edit-error">{error}</div>
       </div>
     );
   }
 
   return (
-    <div
-      style={{
-        backgroundColor: "white",
-        padding: "30px",
-        borderRadius: "8px",
-        boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
-        maxWidth: "600px",
-        margin: "0 auto",
-      }}
-    >
-      <h1 style={{ color: "#333", marginBottom: "30px" }}>
+    <div className="user-edit-container">
+      <h1 className="user-edit-title">
         {currentUser?.id === parseInt(userId) ? "Meu Perfil" : "Editar Usuário"}
       </h1>
 
-      {error && (
-        <div
-          style={{
-            backgroundColor: "#ffebee",
-            color: "#c62828",
-            padding: "15px",
-            borderRadius: "4px",
-            marginBottom: "20px",
-          }}
-        >
-          {error}
-        </div>
-      )}
+      {error && <div className="user-edit-error">{error}</div>}
 
-      {success && (
-        <div
-          style={{
-            backgroundColor: "#e8f5e8",
-            color: "#2e7d32",
-            padding: "15px",
-            borderRadius: "4px",
-            marginBottom: "20px",
-          }}
-        >
-          {success}
-        </div>
-      )}
+      {success && <div className="user-edit-success">{success}</div>}
 
       <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: "20px" }}>
-          <label
-            style={{
-              display: "block",
-              marginBottom: "8px",
-              fontWeight: "bold",
-              color: "#333",
-            }}
-          >
-            Nome:
-          </label>
+        <div className="user-edit-form-group">
+          <label className="user-edit-label">Nome:</label>
           <input
             type="text"
             name="name"
             value={user.name}
             onChange={handleChange}
             required
-            style={{
-              width: "100%",
-              padding: "12px",
-              border: "1px solid #ddd",
-              borderRadius: "4px",
-              fontSize: "16px",
-              boxSizing: "border-box",
-            }}
+            className="user-edit-input"
           />
         </div>
 
-        <div style={{ marginBottom: "20px" }}>
-          <label
-            style={{
-              display: "block",
-              marginBottom: "8px",
-              fontWeight: "bold",
-              color: "#333",
-            }}
-          >
-            Email:
-          </label>
+        <div className="user-edit-form-group">
+          <label className="user-edit-label">Email:</label>
           <input
             type="email"
             name="email"
             value={user.email}
             onChange={handleChange}
             required
-            style={{
-              width: "100%",
-              padding: "12px",
-              border: "1px solid #ddd",
-              borderRadius: "4px",
-              fontSize: "16px",
-              boxSizing: "border-box",
-            }}
+            className="user-edit-input"
           />
         </div>
 
-        <div style={{ marginBottom: "30px" }}>
-          <label
-            style={{
-              display: "block",
-              marginBottom: "8px",
-              fontWeight: "bold",
-              color: "#333",
-            }}
-          >
-            Perfil:
-          </label>
-          <div
-            style={{
-              padding: "12px",
-              backgroundColor: "#f8f9fa",
-              border: "1px solid #ddd",
-              borderRadius: "4px",
-              color: "#666",
-            }}
-          >
+        <div className="user-edit-form-group">
+          <label className="user-edit-label">Perfil:</label>
+          <div className="user-edit-display-field">
             {user.role === "admin" ? "Administrador" : "Usuário"}
           </div>
         </div>
 
-        <div style={{ marginBottom: "30px" }}>
-          <label
-            style={{
-              display: "block",
-              marginBottom: "8px",
-              fontWeight: "bold",
-              color: "#333",
-            }}
-          >
-            Data de Criação:
-          </label>
-          <div
-            style={{
-              padding: "12px",
-              backgroundColor: "#f8f9fa",
-              border: "1px solid #ddd",
-              borderRadius: "4px",
-              color: "#666",
-            }}
-          >
+        <div className="user-edit-form-group">
+          <label className="user-edit-label">Data de Criação:</label>
+          <div className="user-edit-display-field">
             {new Date(user.createdAt).toLocaleDateString("pt-BR")}
           </div>
         </div>
 
-        <div
-          style={{
-            display: "flex",
-            gap: "15px",
-            justifyContent: "flex-end",
-          }}
-        >
+        <div className="user-edit-actions">
           <button
             type="button"
             onClick={() => navigate("/users")}
-            style={{
-              backgroundColor: "#6c757d",
-              color: "white",
-              border: "none",
-              padding: "12px 24px",
-              borderRadius: "4px",
-              cursor: "pointer",
-              fontSize: "16px",
-            }}
+            className="user-edit-cancel-button"
           >
             Cancelar
           </button>
@@ -280,16 +138,7 @@ function UserEdit() {
           <button
             type="submit"
             disabled={loading}
-            style={{
-              backgroundColor: loading ? "#ccc" : "#007bff",
-              color: "white",
-              border: "none",
-              padding: "12px 24px",
-              borderRadius: "4px",
-              cursor: loading ? "not-allowed" : "pointer",
-              fontSize: "16px",
-              fontWeight: "bold",
-            }}
+            className="user-edit-save-button"
           >
             {loading ? "Salvando..." : "Salvar Alterações"}
           </button>

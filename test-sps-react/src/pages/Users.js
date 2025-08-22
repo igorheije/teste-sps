@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { list, create, deleteUser } from "../services/UserService";
 import { useAuth } from "../contexts/AuthContext";
+import "./Users.css";
 
 function Users() {
   const { isAdmin, user: currentUser } = useAuth();
@@ -63,7 +64,7 @@ function Users() {
 
   if (loading) {
     return (
-      <div style={{ textAlign: "center", padding: "50px" }}>
+      <div className="users-loading">
         <h2>Carregando usuários...</h2>
       </div>
     );
@@ -71,79 +72,27 @@ function Users() {
 
   return (
     <div>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: "30px",
-        }}
-      >
-        <h1 style={{ margin: 0, color: "#333" }}>Gerenciar Usuários</h1>
+      <div className="users-header">
+        <h1 className="users-title">Gerenciar Usuários</h1>
         {isAdmin() && (
           <button
             onClick={() => setShowCreateForm(!showCreateForm)}
-            style={{
-              backgroundColor: "#28a745",
-              color: "white",
-              border: "none",
-              padding: "10px 20px",
-              borderRadius: "4px",
-              cursor: "pointer",
-              fontWeight: "bold",
-            }}
+            className="users-create-button"
           >
             {showCreateForm ? "Cancelar" : "Novo Usuário"}
           </button>
         )}
       </div>
 
-      {error && (
-        <div
-          style={{
-            backgroundColor: "#ffebee",
-            color: "#c62828",
-            padding: "15px",
-            borderRadius: "4px",
-            marginBottom: "20px",
-          }}
-        >
-          {error}
-        </div>
-      )}
+      {error && <div className="users-error">{error}</div>}
 
       {showCreateForm && isAdmin() && (
-        <div
-          style={{
-            backgroundColor: "white",
-            padding: "20px",
-            borderRadius: "8px",
-            marginBottom: "20px",
-            boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
-          }}
-        >
-          <h3 style={{ marginTop: 0, marginBottom: "20px" }}>
-            Criar Novo Usuário
-          </h3>
+        <div className="users-create-form">
+          <h3 className="users-create-title">Criar Novo Usuário</h3>
           <form onSubmit={handleCreateUser}>
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr",
-                gap: "15px",
-                marginBottom: "20px",
-              }}
-            >
-              <div>
-                <label
-                  style={{
-                    display: "block",
-                    marginBottom: "5px",
-                    fontWeight: "bold",
-                  }}
-                >
-                  Nome:
-                </label>
+            <div className="users-form-grid">
+              <div className="users-form-group">
+                <label className="users-label">Nome:</label>
                 <input
                   type="text"
                   value={newUser.name}
@@ -151,24 +100,11 @@ function Users() {
                     setNewUser({ ...newUser, name: e.target.value })
                   }
                   required
-                  style={{
-                    width: "100%",
-                    padding: "8px",
-                    border: "1px solid #ddd",
-                    borderRadius: "4px",
-                  }}
+                  className="users-input"
                 />
               </div>
-              <div>
-                <label
-                  style={{
-                    display: "block",
-                    marginBottom: "5px",
-                    fontWeight: "bold",
-                  }}
-                >
-                  Email:
-                </label>
+              <div className="users-form-group">
+                <label className="users-label">Email:</label>
                 <input
                   type="email"
                   value={newUser.email}
@@ -176,24 +112,11 @@ function Users() {
                     setNewUser({ ...newUser, email: e.target.value })
                   }
                   required
-                  style={{
-                    width: "100%",
-                    padding: "8px",
-                    border: "1px solid #ddd",
-                    borderRadius: "4px",
-                  }}
+                  className="users-input"
                 />
               </div>
-              <div>
-                <label
-                  style={{
-                    display: "block",
-                    marginBottom: "5px",
-                    fontWeight: "bold",
-                  }}
-                >
-                  Senha:
-                </label>
+              <div className="users-form-group">
+                <label className="users-label">Senha:</label>
                 <input
                   type="password"
                   value={newUser.password}
@@ -201,35 +124,17 @@ function Users() {
                     setNewUser({ ...newUser, password: e.target.value })
                   }
                   required
-                  style={{
-                    width: "100%",
-                    padding: "8px",
-                    border: "1px solid #ddd",
-                    borderRadius: "4px",
-                  }}
+                  className="users-input"
                 />
               </div>
-              <div>
-                <label
-                  style={{
-                    display: "block",
-                    marginBottom: "5px",
-                    fontWeight: "bold",
-                  }}
-                >
-                  Perfil:
-                </label>
+              <div className="users-form-group">
+                <label className="users-label">Perfil:</label>
                 <select
                   value={newUser.role}
                   onChange={(e) =>
                     setNewUser({ ...newUser, role: e.target.value })
                   }
-                  style={{
-                    width: "100%",
-                    padding: "8px",
-                    border: "1px solid #ddd",
-                    borderRadius: "4px",
-                  }}
+                  className="users-select"
                 >
                   <option value="user">Usuário</option>
                   <option value="admin">Administrador</option>
@@ -239,15 +144,7 @@ function Users() {
             <button
               type="submit"
               disabled={creating}
-              style={{
-                backgroundColor: creating ? "#ccc" : "#007bff",
-                color: "white",
-                border: "none",
-                padding: "10px 20px",
-                borderRadius: "4px",
-                cursor: creating ? "not-allowed" : "pointer",
-                fontWeight: "bold",
-              }}
+              className="users-submit-button"
             >
               {creating ? "Criando..." : "Criar Usuário"}
             </button>
@@ -255,106 +152,40 @@ function Users() {
         </div>
       )}
 
-      <div
-        style={{
-          backgroundColor: "white",
-          borderRadius: "8px",
-          boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
-          overflow: "hidden",
-        }}
-      >
-        <table style={{ width: "100%", borderCollapse: "collapse" }}>
-          <thead>
-            <tr style={{ backgroundColor: "#f8f9fa" }}>
-              <th
-                style={{
-                  padding: "15px",
-                  textAlign: "left",
-                  borderBottom: "1px solid #dee2e6",
-                }}
-              >
-                Nome
-              </th>
-              <th
-                style={{
-                  padding: "15px",
-                  textAlign: "left",
-                  borderBottom: "1px solid #dee2e6",
-                }}
-              >
-                Email
-              </th>
-              <th
-                style={{
-                  padding: "15px",
-                  textAlign: "left",
-                  borderBottom: "1px solid #dee2e6",
-                }}
-              >
-                Perfil
-              </th>
-              <th
-                style={{
-                  padding: "15px",
-                  textAlign: "left",
-                  borderBottom: "1px solid #dee2e6",
-                }}
-              >
-                Data de Criação
-              </th>
-              <th
-                style={{
-                  padding: "15px",
-                  textAlign: "center",
-                  borderBottom: "1px solid #dee2e6",
-                }}
-              >
-                Ações
-              </th>
+      <div className="users-table-container">
+        <table className="users-table">
+          <thead className="users-table-header">
+            <tr>
+              <th>Nome</th>
+              <th>Email</th>
+              <th>Perfil</th>
+              <th>Data de Criação</th>
+              <th className="actions">Ações</th>
             </tr>
           </thead>
           <tbody>
             {users.map((user) => (
-              <tr key={user.id} style={{ borderBottom: "1px solid #dee2e6" }}>
-                <td style={{ padding: "15px" }}>{user.name}</td>
-                <td style={{ padding: "15px" }}>{user.email}</td>
-                <td style={{ padding: "15px" }}>
+              <tr key={user.id} className="users-table-row">
+                <td className="users-table-cell">{user.name}</td>
+                <td className="users-table-cell">{user.email}</td>
+                <td className="users-table-cell">
                   <span
-                    style={{
-                      backgroundColor:
-                        user.role === "admin" ? "#dc3545" : "#28a745",
-                      color: "white",
-                      padding: "4px 8px",
-                      borderRadius: "12px",
-                      fontSize: "12px",
-                      fontWeight: "bold",
-                    }}
+                    className={`users-role-badge ${
+                      user.role === "admin" ? "admin" : ""
+                    }`}
                   >
                     {user.role === "admin" ? "Admin" : "Usuário"}
                   </span>
                 </td>
-                <td style={{ padding: "15px" }}>
+                <td className="users-table-cell">
                   {new Date(user.createdAt).toLocaleDateString("pt-BR")}
                 </td>
-                <td style={{ padding: "15px", textAlign: "center" }}>
-                  <div
-                    style={{
-                      display: "flex",
-                      gap: "10px",
-                      justifyContent: "center",
-                    }}
-                  >
+                <td className="users-table-cell actions">
+                  <div className="users-actions">
                     {(isAdmin() || user.id === currentUser.id) && (
                       <Link
                         to={`/users/${user.id}`}
-                        style={{
-                          backgroundColor: "#17a2b8",
-                          color: "white",
-                          padding: "6px 12px",
-                          textDecoration: "none",
-                          borderRadius: "4px",
-                          fontSize: "14px",
-                        }}
+                        className="users-edit-link"
                       >
                         Editar
                       </Link>
@@ -362,15 +193,7 @@ function Users() {
                     {isAdmin() && (
                       <button
                         onClick={() => handleDeleteUser(user.id, user.name)}
-                        style={{
-                          backgroundColor: "#dc3545",
-                          color: "white",
-                          border: "none",
-                          padding: "6px 12px",
-                          borderRadius: "4px",
-                          cursor: "pointer",
-                          fontSize: "14px",
-                        }}
+                        className="users-delete-button"
                       >
                         Excluir
                       </button>
@@ -383,9 +206,7 @@ function Users() {
         </table>
 
         {users.length === 0 && (
-          <div style={{ padding: "40px", textAlign: "center", color: "#666" }}>
-            Nenhum usuário encontrado.
-          </div>
+          <div className="users-empty">Nenhum usuário encontrado.</div>
         )}
       </div>
     </div>
